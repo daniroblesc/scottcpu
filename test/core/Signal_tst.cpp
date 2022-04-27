@@ -136,16 +136,17 @@ TEST_F(WhenWorkingWithSignal, moveFromAnEnabledSignalToASignalWithoutValue)
 TEST_F(WhenWorkingWithSignal, moveFromAnEnabledSignalToASignalWithValue) 
 {
     // Arrange
-    enableSignal(signal_);
+    std::shared_ptr<Signal> fromSignal = std::make_shared<Signal>();
+    enableSignal(fromSignal);
 
-    std::shared_ptr<Signal> s = std::make_shared<Signal>();
-    disableSignal(s);
-    checkSignalDisabled(s);
+    disableSignal(signal_);
+    checkSignalDisabled(signal_);
 
     // Act
-    EXPECT_TRUE(s->MoveSignal(signal_));
+    EXPECT_TRUE(signal_->MoveSignal(fromSignal));
 
     // Assert
-    checkSignalEnabled(s);
-    ASSERT_FALSE(signal_->HasValue());
+    checkSignalEnabled(signal_);
+    ASSERT_TRUE(signal_->HasValue());
+    ASSERT_FALSE(fromSignal->HasValue());
 }
