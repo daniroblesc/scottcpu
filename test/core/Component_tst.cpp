@@ -27,4 +27,31 @@ protected:
     void TearDown() override 
     {
     } 
+
+    class AND : public Component
+    {
+    public:
+        AND() : Component( ProcessOrder::OutOfOrder )
+        {
+            SetInputCount(2);
+            SetOutputCount(1);
+        }
+
+    protected:
+        virtual void Process( SignalBus const& inputs, SignalBus& outputs ) override
+        {
+            bool in0 = inputs.GetValue(0);
+            bool in1 = inputs.GetValue(1);
+
+            onebit retval;
+            retval.value = (in0 && in1);
+            outputs.SetValue(0, retval);
+        }
+    };
 };
+
+TEST_F(WhenWorkingWithComponent, andComponent) 
+{
+    auto andComponent = std::make_shared<AND>();
+}
+
